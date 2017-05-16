@@ -1,0 +1,23 @@
+load data
+Ts = 1
+plantData = iddata(data(:,1),data(:,2),Ts);
+figure(1)
+nb = 2;
+nf = 2;
+nk = 3;
+oeModel = oe(plantData,[nb nf nk]);
+opt = compareOptions('InitialCondition','z');
+compare(oeModel,plantData,opt)
+YData = yData.Data;
+UData = uData(:,2);
+T = table(YData,UData);
+%filename = 'oeModel.xlsx';
+%writetable(T,filename,'Sheet',1)
+figure(2)
+nb = 2;
+nc = 2;
+nd = 2;
+nf = 2;
+nk = 1;
+bjModel = bj(plantData,[nb nc nd nf nk]);
+compare(bjModel,plantData,opt)
