@@ -104,7 +104,7 @@ function varargout = predict(varargin)
     end
     WkqGq = Wkq*Gq
     Wkq1 = 1-Wkq
-   pause
+   //pause
 //------------------------------------------------------------------------------
     // storing the plant data
     uCoeff = coeff(WkqGq.num*Wkq1.den)

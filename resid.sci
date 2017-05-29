@@ -35,8 +35,8 @@ function resid(varargin)
     [a,x0] = pe(tempData,varargin(2))
 //------------------------------------------------------------------------------
     errorData = a
-    eAutoCorr = xcorr(errorData,25,'biased')
-    uAutoCorr = xcorr(uData,25,'biased')
+    eAutoCorr = xcorr(errorData,25,'coeff')//'biased')
+    uAutoCorr = xcorr(uData,25,'coeff')//'biased')
     eAutoCorrMax = max(eAutoCorr)
     eAutoCorr = eAutoCorr/eAutoCorrMax
 //------------------------------------------------------------------------------

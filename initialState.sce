@@ -29,26 +29,29 @@ for ii = 0:noSample-1
     obMat = [obMat;C*A^ii]
 end
 obMat = clean(obMat,0.00001);
-bMat = [z(1,1)]
-tempMat = []
-
-for ii = 2:noSample
-
-    for jj = ii-1:-1:1
-        //disp(jj)
-        aa = C*A^(jj-1)*B
-        tempMat = [tempMat aa]
-    end
-
-//    pause
-    bMat = [bMat;tempMat*data(1:ii-1,2)]
-//    disp(ii)
-//    disp(tempMat)
-//    disp(bMat)
-//    pause
-    tempMat = []
-end
-y2 = data(:,1)-bMat
-//disp(bMat)
-//x0 = umfpack(obMat,"\",y2)
-x0 = obMat\y2
+[y x0] = pe(data,bjModel)
+xo = obMat\y
+//bMat = [z(1,1)]
+//tempMat = []
+//
+//for ii = 2:noSample
+//
+//    for jj = ii-1:-1:1
+//        //disp(jj)
+//        aa = C*A^(jj-1)*B
+//        tempMat = [tempMat aa]
+//    end
+//
+////    pause
+//    bMat = [bMat;tempMat*data(1:ii-1,2)]
+////    disp(ii)
+////    disp(tempMat)
+////    disp(bMat)
+////    pause
+//    tempMat = []
+//end
+//y2 = data(:,1)-bMat
+////disp(bMat)
+////x0 = umfpack(obMat,"\",y2)
+//x0 = obMat\y2
+//
