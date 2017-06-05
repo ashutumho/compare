@@ -1,5 +1,5 @@
 
-function [theta_bj,opt_err,resid] =  arx_2(varargin)
+function [theta_arx,opt_err,resid] =  arx(varargin)
 //
 	[lhs , rhs] = argn();	
 	if ( rhs < 2 ) then
@@ -53,8 +53,10 @@ function [theta_bj,opt_err,resid] =  arx_2(varargin)
     a = 1-poly([var(nb+1:nb+na)]',"q","coeff");
     b = poly([repmat(0,nk,1);var(1:nb)]',"q","coeff");
     a = (poly([1,-coeff(a)],'q','coeff'))
+    disp(a)
+    disp(b)
     p = struct('B',b,'A',a);
-    theta_bj = p;
+    theta_arx = p;
 endfunction
 
 function yhat = _objfun(UDATA,YDATA,x,na,nb,nk)

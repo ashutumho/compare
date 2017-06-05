@@ -45,7 +45,7 @@ endfunction
 function %idpoly_p(mytlist)
     f = fieldnames(mytlist)
     //A polynomial
-    if mytlist(f(1)) == 1 then
+    if mytlist(f(1)) == 1 && size(mytlist(f(1)),'*') == 1 then
     else
         mprintf('\n  A(z) =')
         temp = poly2str(mytlist(f(1)))
@@ -61,23 +61,22 @@ function %idpoly_p(mytlist)
     end
     
     //C polynomial
-    if mytlist(f(3)) == 1 then
+    if mytlist(f(3)) == 1 && size(mytlist(f(3)),'*') == 1 then
     else
         mprintf('\n  C(z) =')
         temp = poly2str(mytlist(f(3)))
         mprintf('%s\n',temp)
     end
-    
     //D polynomial
-    if mytlist(f(4)) == 1 then
-    else
+    if mytlist(f(4)) == 1 && size(mytlist(f(4)),'*') == 1 then
+    elseif size(mytlist(f(4)),'*') > 1 then
         mprintf('\n  D(z) =')
         temp = poly2str(mytlist(f(4)))
         mprintf('%s\n',temp)
     end
     
     //F polynomial
-    if mytlist(f(5)) == 1 then
+    if mytlist(f(5)) == 1 && size(mytlist(f(5)),'*') == 1 then
     else
         mprintf('\n  F(z) =')
         temp = poly2str(mytlist(f(5)))
@@ -89,7 +88,11 @@ function %idpoly_p(mytlist)
     if mytlist.Ts == -1 then
         mprintf('undefined')
     else
-        mprintf('%f %s',mytlist.Ts,mytlist.TimeUnit)
+        if ~(ceil(mytlist.Ts)-mytlist.Ts) then
+            mprintf('%d %s',mytlist.Ts,mytlist.TimeUnit)
+        else
+            mprintf('%.0000f %s',mytlist.Ts,mytlist.TimeUnit)
+        end
     end
     mprintf('\n')
         
@@ -100,8 +103,8 @@ function strout = poly2str(h)
     temp = poly(h,'x','coeff')
     temp = pol2str(temp)
     temp = strsubst(temp,'-',' - ')
-    temp = strsubst(temp,'x^','z^-')
-    temp = strsubst(temp,'x','z^-1')
+    temp = strsubst(temp,'x^',' z^-')
+    temp = strsubst(temp,'x',' z^-1')
     temp = strsubst(temp,'*','')
     temp = strsubst(temp,'+',' + ')
     [ind which]=strindex(temp,'-')

@@ -1,45 +1,38 @@
 
-function [theta_bj,opt_err,resid] =  arx_2(varargin)
+function [theta_bj,opt_err,resid] =  ar(varargin)
 //
 	[lhs , rhs] = argn();	
 	if ( rhs < 2 ) then
-			errmsg = msprintf(gettext("%s: Unexpected number of input arguments : %d provided while should be 2"), "arx", rhs);
+			errmsg = msprintf(gettext("%s: Unexpected number of input arguments : %d provided while should be 2"), "ar", rhs);
 			error(errmsg)
 	end
 
 	z = varargin(1)
-	if ((~size(z,2)==2) & (~size(z,1)==2)) then
-		errmsg = msprintf(gettext("%s: input and output data matrix should be of size (number of data)*2"), "arx");
+	if ~iscolumn(z) then
+		errmsg = msprintf(gettext("%s: time series output data only"), "ar");
 		error(errmsg);
 	end
 
 	if (~isreal(z)) then
-		errmsg = msprintf(gettext("%s: input and output data matrix should be a real matrix"), "arx");
+		errmsg = msprintf(gettext("%s: input and output data matrix should be a real matrix"), "ar");
 		error(errmsg);
 	end
 
 	n = varargin(2)
-	if (size(n,"*")<2| size(n,"*")>3) then
-		errmsg = msprintf(gettext("%s: The order and delay matrix [na nb nk] should be of size [2 3]"), "arx");
+	if (size(n,"*") ~=1 )then
+		errmsg = msprintf(gettext("%s: order should be nonnegative integer number "), "ar");
 		error(errmsg);
 	end
 
 	if (size(find(n<0),"*") | size(find(((n-floor(n))<%eps)== %f))) then
-		errmsg = msprintf(gettext("%s: values of order and delay matrix [na nb nk] should be nonnegative integer number "), "arx");
+		errmsg = msprintf(gettext("%s: values of order and delay matrix [na] should be nonnegative integer number "), "ar");
 		error(errmsg);
 	end
 
-	na = n(1); nb = n(2); //nk = n(3); //nf = n(4);
-//	
-	if (size(n,"*") == 2) then
-		nk = 1
-	else
-		nk = n(3);
-	end
-
+	na = n; nb = 0; nk = 0; 
     // storing U(k) , y(k) and n data in UDATA,YDATA and NDATA respectively 
     YDATA = z(:,1);
-    UDATA = z(:,2);
+    UDATA = zeros(size(z,1),1)
     NDATA = size(UDATA,"*");
     function e = G(p,m)
         e = YDATA - _objfun(UDATA,YDATA,p,na,nb,nk);
@@ -53,7 +46,9 @@ function [theta_bj,opt_err,resid] =  arx_2(varargin)
     a = 1-poly([var(nb+1:nb+na)]',"q","coeff");
     b = poly([repmat(0,nk,1);var(1:nb)]',"q","coeff");
     a = (poly([1,-coeff(a)],'q','coeff'))
-    p = struct('B',b,'A',a);
+//    disp(a)
+//    disp(b)
+    p = struct('A',a);
     theta_bj = p;
 endfunction
 
