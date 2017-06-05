@@ -1,5 +1,5 @@
 
-function [theta_bj,opt_err,resid] =  ar(varargin)
+function [theta_ar,opt_err,resid] =  ar(varargin)
 //
 	[lhs , rhs] = argn();	
 	if ( rhs < 2 ) then
@@ -49,7 +49,7 @@ function [theta_bj,opt_err,resid] =  ar(varargin)
 //    disp(a)
 //    disp(b)
     p = struct('A',a);
-    theta_bj = p;
+    theta_ar = p;
 endfunction
 
 function yhat = _objfun(UDATA,YDATA,x,na,nb,nk)
